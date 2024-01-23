@@ -1,34 +1,34 @@
-class Solution {
+class Solution 
+{
 public:
-    int maxLength(vector<string>& arr) {
-        int result = 0;
-        dfs(arr, "", 0, result);
-        return result;
-    }
-
-private:
-    void dfs(const vector<string>& arr, const string& path, int idx, int& result) {
-        if (isUniqueChars(path)) {
-            result = max(result, static_cast<int>(path.length()));
+    int maxLength(vector<string>& arr) 
+    {
+        int max_len = 0;
+        
+        // [1] we should first throw away all strings with any
+        //    duplicate characters; strings with all unique 
+        //    characters are the subsets of the alphabet, thus,
+        //    can be encoded using binary form
+        vector<bitset<26>> unique;
+        for (auto s : arr)
+        {
+            bitset<26> bin;
+            for (char ch : s) bin.set(ch - 'a');
+            if (bin.count() == s.size())
+                unique.push_back(bin);
         }
-
-        if (idx == arr.size() || !isUniqueChars(path)) {
-            return;
-        }
-
-        for (int i = idx; i < arr.size(); i++) {
-            dfs(arr, path + arr[i], i + 1, result);
-        }
-    }
-
-    bool isUniqueChars(const string& s) {
-        unordered_set<char> set;
-        for (char c : s) {
-            if (set.count(c)) {
-                return false;
-            }
-            set.insert(c);
-        }
-        return true;
+        
+        // [2] now start with an empty concatenation and iteratively
+        //    increase its length by trying to add more strings
+        vector<bitset<26>> concat = {bitset<26>()};
+        for (auto& u : unique)
+            for (int i = concat.size() - 1; i >= 0; i--)
+                if ((concat[i] & u).none())
+                {
+                    concat.push_back(concat[i] | u);
+                    max_len = max(max_len, (int)(concat[i].count() + u.count()));
+                }
+        
+        return max_len;
     }
 };
