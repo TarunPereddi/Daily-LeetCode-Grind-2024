@@ -1,23 +1,23 @@
 class Solution {
 public:
-    int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
-        vector<vector<vector<int>>> dp(m, vector<vector<int>>(n, vector<int>(maxMove + 1, -1)));
-        const int mod = 1000000007;
+    int mod = 1e9+7;
+    long long rec(int x, int y, int m, int n, int mov, long long dp[][51][51]){
+      if(x<0 || y<0 || x>=m || y>=n) return 1;
+      if(mov==0) return 0;
+      if(dp[x][y][mov]!=-1) return dp[x][y][mov];
+      return dp[x][y][mov] = (rec(x+1,y,m,n,mov-1,dp)%mod + rec(x-1,y,m,n,mov-1,dp)%mod + rec(x,y+1,m,n,mov-1,dp)%mod + rec(x,y-1,m,n,mov-1,dp)%mod)%mod;
+    }
+    int findPaths(int m, int n, int maxMove, int r, int c) {
+      long long dp[m][51][51];
+      for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+          for(int k=0;k<=maxMove;k++) dp[i][j][k] = -1;
+        }
+      }
 
-        function<int(int, int, int)> helper = [&](int x, int y, int maxMove) -> int {
-            if (x < 0 || x >= m || y < 0 || y >= n) return 1;
-            if (maxMove <= 0) return 0;
-            if (dp[x][y][maxMove] != -1) return dp[x][y][maxMove];
 
-            int res = 0;
-            res = (res + helper(x + 1, y, maxMove - 1)) % mod;
-            res = (res + helper(x, y - 1, maxMove - 1)) % mod;
-            res = (res + helper(x - 1, y, maxMove - 1)) % mod;
-            res = (res + helper(x, y + 1, maxMove - 1)) % mod;
-            dp[x][y][maxMove] = res;
-            return res;
-        };
 
-        return helper(startRow, startColumn, maxMove);
+      return rec(r,c,m,n,maxMove,dp);
+        
     }
 };
