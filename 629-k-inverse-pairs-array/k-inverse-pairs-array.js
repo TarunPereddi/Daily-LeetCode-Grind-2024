@@ -1,8 +1,3 @@
-/**
- * @param {number} n
- * @param {number} k
- * @return {number}
- */
 var kInversePairs = function(n, k) {
     const MOD = 1e9 + 7;
     const dp = new Array(n + 1).fill(0).map(() => new Array(k + 1).fill(0));
