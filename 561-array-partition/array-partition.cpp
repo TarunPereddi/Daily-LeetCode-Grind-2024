@@ -1,6 +1,9 @@
 class Solution {
 public:
     int arrayPairSum(vector<int>& nums) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(nullptr);
+        cout.tie(nullptr);
         vector<int> freq(20001, 0);
         for (int num : nums) {
             freq[num + 10000]++;
