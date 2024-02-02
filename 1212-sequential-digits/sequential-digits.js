@@ -5,15 +5,19 @@
  */
 var sequentialDigits = function(low, high) {
     let sequenceArr = [];
-
-    for (let i = 1; i <= 9; i++) {
-        let number = i;
-        for (let j = i + 1; j <= 9; j++) {
-            number = number * 10 + j;
-            sequenceArr.push(number);
+    
+    let maxDigit = 123456789;
+    let maxString = maxDigit.toString();
+    while (maxString.length > 1){
+        while (maxDigit > 10) {
+         sequenceArr.push(maxDigit);
+         maxDigit = Math.trunc(maxDigit/10);
         }
+        maxString = maxString.substring(1);
+        maxDigit = parseInt(maxString);
     }
-    sequenceArr.sort((a,b)=>a-b);
+    
+    sequenceArr.sort((a, b) => a - b);
     sequenceArr = sequenceArr.filter(number => number >= low && number <= high);
 
     return sequenceArr;
